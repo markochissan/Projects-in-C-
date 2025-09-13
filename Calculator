@@ -1,0 +1,58 @@
+using System;
+
+namespace Calculator{
+
+  static void Main(string[]args){
+    do{
+        double FirstNumber = 0;
+        double SecondNumber = 0;
+        double result = 0;
+
+                Console.WriteLine("------------------");
+                Console.WriteLine("Calculator Program");
+                Console.WriteLine("------------------");
+
+                Console.Write("Enter FirstNumber: ");
+                FirstNumber = Convert.ToDouble(Console.ReadLine());
+
+                Console.Write("Enter SecondNumber: ");
+                SecondNumber = Convert.ToDouble(Console.ReadLine());
+
+                Console.WriteLine("Enter an option: ");
+                Console.WriteLine("\t+ : Add");
+                Console.WriteLine("\t- : Subtract");
+                Console.WriteLine("\t* : Multiply");
+                Console.WriteLine("\t/ : Divide");
+                Console.Write("Enter an option: ");
+
+switch (Console.ReadLine()){
+
+                    case "+":
+                        result = FirstNumber + SecondNumber;
+                        Console.WriteLine($"Your result: {FirstNumber} + {SecondNumber} = " + result);
+                        break;
+                    case "-":
+                        result = FirstNumber - SecondNumber;
+                        Console.WriteLine($"Your result: {FirstNumber} - {SecondNumber} = " + result);
+                        break;
+                    case "*":
+                        result = FirstNumber * SecondNumber;
+                        Console.WriteLine($"Your result: {FirstNumber} * {SecondNumber} = " + result);
+                        break;
+                    case "/":
+                        result = FirstNumber / SecondNumber;
+                        Console.WriteLine($"Your result: {FirstNumber} / {SecondNumber} = " + result);
+                        break;
+                    default:
+                        Console.WriteLine("That was not a valid option");
+                        break;
+                }
+        Console.Write("Would you like to continue? (Y = yes, N = No): ");
+            } while (Console.ReadLine().ToUpper() == "Y");
+
+            Console.WriteLine("BYE BYE!");
+            Console.ReadKey();
+          }
+      }
+  }
+}
