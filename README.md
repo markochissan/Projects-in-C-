@@ -1,2 +1,2 @@
 # Projects-in-C-
-some project in C#
+some projects in C#
