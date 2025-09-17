@@ -1,0 +1,289 @@
+using System;
+using System.Collections.Generic;
+
+namespace ZooManagementSystem
+{
+    // Interface for animal behavior
+    public interface IAnimalBehavior
+    {
+        void MakeSound();
+        void PerformTrick();
+    }
+
+    // Abstract base class for all animals
+    public abstract class Animal
+    {
+        // Private fields for common properties
+        private string name;
+        private int age;
+        private string gender;
+
+        // Properties with getters and setters
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
+        public int Age
+        {
+            get { return age; }
+            set { age = value; }
+        }
+
+        public string Gender
+        {
+            get { return gender; }
+            set { gender = value; }
+        }
+
+        // Constructor
+        protected Animal(string name, int age, string gender)
+        {
+            this.name = name;
+            this.age = age;
+            this.gender = gender;
+        }
+
+        // Abstract methods to be implemented by derived classes
+        public abstract void DisplayInfo();
+        public abstract string GetSpecialProperty();
+    }
+
+    // Lion class 
+    public class Lion : Animal, IAnimalBehavior
+    {
+        // Special property for Lion
+        private float maneSize;
+
+        public float ManeSize
+        {
+            get { return maneSize; }
+            set { maneSize = value; }
+        }
+
+        public Lion(string name, int age, string gender, float maneSize)
+            : base(name, age, gender)
+        {
+            this.maneSize = maneSize;
+        }
+
+        public override void DisplayInfo()
+        {
+            Console.WriteLine($"Lion: {Name}, {Age} years old, {Gender}, Mane Size: {ManeSize}");
+        }
+
+        public override string GetSpecialProperty()
+        {
+            return $"Mane Size: {ManeSize}";
+        }
+
+        public void MakeSound()
+        {
+            Console.WriteLine($"{Name} the Lion roars loudly!");
+        }
+
+        public void PerformTrick()
+        {
+            Console.WriteLine($"{Name} jumps through a hoop of fire!");
+        }
+    }
+
+    // Elephant class 
+    public class Elephant : Animal, IAnimalBehavior
+    {
+        // Special property for Elephant
+        private float tuskLength;
+
+        public float TuskLength
+        {
+            get { return tuskLength; }
+            set { tuskLength = value; }
+        }
+
+        public Elephant(string name, int age, string gender, float tuskLength)
+            : base(name, age, gender)
+        {
+            this.tuskLength = tuskLength;
+        }
+
+        public override void DisplayInfo()
+        {
+            Console.WriteLine($"Elephant: {Name}, {Age} years old, {Gender}, Tusk Length: {TuskLength}");
+        }
+
+        public override string GetSpecialProperty()
+        {
+            return $"Tusk Length: {TuskLength}";
+        }
+
+        public void MakeSound()
+        {
+            Console.WriteLine($"{Name} the Elephant trumpets!");
+        }
+
+        public void PerformTrick()
+        {
+            Console.WriteLine($"{Name} balances on a ball!");
+        }
+    }
+
+    // Monkey class 
+    public class Monkey : Animal, IAnimalBehavior
+    {
+        // Special property for Monkey
+        private int intelligenceQuotient;
+
+        public int IntelligenceQuotient
+        {
+            get { return intelligenceQuotient; }
+            set { intelligenceQuotient = value; }
+        }
+
+        public Monkey(string name, int age, string gender, int intelligenceQuotient)
+            : base(name, age, gender)
+        {
+            this.intelligenceQuotient = intelligenceQuotient;
+        }
+
+        public override void DisplayInfo()
+        {
+            Console.WriteLine($"Monkey: {Name}, {Age} years old, {Gender}, IQ: {IntelligenceQuotient}");
+        }
+
+        public override string GetSpecialProperty()
+        {
+            return $"Intelligence Quotient: {IntelligenceQuotient}";
+        }
+
+        public void MakeSound()
+        {
+            Console.WriteLine($"{Name} the Monkey chatters!");
+        }
+
+        public void PerformTrick()
+        {
+            Console.WriteLine($"{Name} solves a puzzle!");
+        }
+    }
+
+    // Zoo class to manage animals
+    public class Zoo
+    {
+        private List<Animal> animals;
+        private IAnimalStorage storage;
+
+        // Constructor with dependency injection for storage
+        public Zoo(IAnimalStorage storage)
+        {
+            animals = new List<Animal>();
+            this.storage = storage;
+        }
+
+        public void AddAnimal(Animal animal)
+        {
+            animals.Add(animal);
+            storage.SaveAnimal(animal);
+        }
+
+        public void DisplayAllAnimals()
+        {
+            Console.WriteLine("===== ALL ANIMALS IN THE ZOO =====");
+            foreach (var animal in animals)
+            {
+                animal.DisplayInfo();
+            }
+        }
+
+        public void MakeAllSounds()
+        {
+            Console.WriteLine("===== ANIMAL SOUNDS =====");
+            foreach (var animal in animals)
+            {
+                if (animal is IAnimalBehavior behavior)
+                {
+                    behavior.MakeSound();
+                }
+            }
+        }
+
+        public void PerformAllTricks()
+        {
+            Console.WriteLine("===== ANIMAL TRICKS =====");
+            foreach (var animal in animals)
+            {
+                if (animal is IAnimalBehavior behavior)
+                {
+                    behavior.PerformTrick();
+                }
+            }
+        }
+
+        public void ShowAllSpecialProperties()
+        {
+            Console.WriteLine("===== SPECIAL PROPERTIES =====");
+            foreach (var animal in animals)
+            {
+                Console.WriteLine($"{animal.Name}: {animal.GetSpecialProperty()}");
+            }
+        }
+    }
+
+    // Interface for database storage 
+    public interface IAnimalStorage
+    {
+        void SaveAnimal(Animal animal);
+        Animal LoadAnimal(int id);
+    }
+
+    // Mock implementation of animal storage
+    public class MockAnimalStorage : IAnimalStorage
+    {
+        public void SaveAnimal(Animal animal)
+        {
+            Console.WriteLine($"Saving {animal.Name} to database...");
+        }
+
+        public Animal LoadAnimal(int id)
+        {
+            // Mock implementation
+            return new Lion("Simba", 5, "Male", 4.2f);
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create zoo with storage dependency
+            Zoo zoo = new Zoo(new MockAnimalStorage());
+
+            // Create animals
+            Lion lion = new Lion("Simba", 5, "Male", 4.2f);
+            Elephant elephant = new Elephant("Dumbo", 10, "Male", 120.5f);
+            Monkey monkey = new Monkey("George", 3, "Female", 85);
+
+            // Add animals to zoo
+            zoo.AddAnimal(lion);
+            zoo.AddAnimal(elephant);
+            zoo.AddAnimal(monkey);
+
+            // Display all animals
+            zoo.DisplayAllAnimals();
+            Console.WriteLine();
+
+            // Make all animals perform
+            zoo.MakeAllSounds();
+            Console.WriteLine();
+
+            zoo.PerformAllTricks();
+            Console.WriteLine();
+
+            // Show special properties
+            zoo.ShowAllSpecialProperties();
+            Console.WriteLine();
+
+   
+        }
+    }
+}
